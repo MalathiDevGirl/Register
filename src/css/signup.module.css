@@ -3,6 +3,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    height: 700px;
 }
 .card {
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
@@ -11,14 +12,19 @@
     border-radius: 10px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
-    width: 900px;
-
+    width: 1200px;
 }
 .formImage {
-    width: 450px;
+    width:500px;
+    margin-top: 20px;
 }
-.input {
-    padding:5px;
-}
+  @media only screen and (max-width:480px) {
+    .formImage {
+        display: none;
+    }
+    .card {
+        justify-content: center;
+    }
+  }

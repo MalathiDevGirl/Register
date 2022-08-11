@@ -1,0 +1,27 @@
+.form {
+    width: 310px;
+}
+h2, label, p{
+    color: #4d7393;
+}
+label, p{
+    font-size: 17px;
+}
+input[type=text],[type=email],[type=password],[type=date] {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 15px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #edf0f3;
+    color: #4d7393;
+    display: block;
+  }
+  @media only screen and (max-width:480px) {
+    .form {
+        width: 250px;
+    }
+  }
