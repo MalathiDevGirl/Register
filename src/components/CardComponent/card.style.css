@@ -1,9 +1,9 @@
-
-.signup {
+.section {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    height: 700px;
+    align-items: center;
+    height: 900px;
 }
 .card {
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
@@ -15,16 +15,22 @@
     justify-content: space-around;
     align-items: center;
     width: 1200px;
+    padding:30px;
 }
-.formImage {
-    width:500px;
-    margin-top: 20px;
-}
-  @media only screen and (max-width:480px) {
-    .formImage {
-        display: none;
+
+@media only screen and (max-width:1024px) {
+    .card {
+        width: 850px;
     }
+  }
+@media only screen and (max-width:768px) {
+    .card {
+        width: 650px;
+    }
+  }
+@media only screen and (max-width:480px) {
     .card {
         justify-content: center;
+        width: 250px;
     }
   }

@@ -1,16 +1,16 @@
-import '../../css/button.css';
-import Button from './Button';
-const ButtonContainer = (props) => {
+import './button.style.css';
+import ButtonComponent from './ButtonComponent';
+const ButtonContainerComponent = (props) => {
     
     return (<div className="buttonContainer">
-        <Button 
+        <ButtonComponent
             className = {"primary"}
             value = {`${props.primaryValue}`}
             />
-        <Button 
+        <ButtonComponent 
             className={"secondary"}
             value = {`${props.secondaryValue}`}
         />
     </div>);
 }
-export default ButtonContainer;
+export default ButtonContainerComponent;
