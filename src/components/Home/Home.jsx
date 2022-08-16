@@ -1,8 +1,15 @@
-import { Link } from "react-router-dom";
+
+import Header from '../Header/Header';
+import ProfileComponent from '../ProfileComponent/ProfileComponent';
+import TableComponent from '../TableComponent/TableComponent';
 const Home = () => {
-    return (<div>
-            <Link to='/'><button>Logout</button></Link>
-            <h1>Welcome User</h1>
-    </div>);
+    const usertype = 'user';
+    const callUser = (usertype === 'admin') ? <TableComponent/> : <ProfileComponent/>;
+    return (
+        <div>
+            <Header/>
+            {callUser}
+        </div>        
+    );
 }
 export default Home;

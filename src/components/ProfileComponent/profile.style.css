@@ -1,0 +1,25 @@
+p{
+    color:black;
+    padding: 5px;
+    font-size: 18px;
+}
+.profile-content {   
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+    background-color: white;
+    border: 1px solid #bacdd8;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 320px;
+    padding: 30px;
+    margin:auto;
+    margin-top: 10px;
+}
+.welcome-icon {
+    width:60px;
+}
+.profile-data {
+    display: block;
+}

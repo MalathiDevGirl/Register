@@ -1,10 +1,8 @@
 import RegisterPage from './page/Register-Signin-Page/RegisterPage';
 import SigninPage from './page/Register-Signin-Page/SigninPage';
-import User from './page/User';
-import Admin from './page/Admin';
 import appStyles from './app.module.css';
 import {BrowserRouter,Route,Routes} from 'react-router-dom';
-
+import Welcome from './page/Welcome';
 function App() {
   return (
     <div className={appStyles.contents}>
@@ -12,8 +10,7 @@ function App() {
       <Routes>
         <Route exact path='/' element={<SigninPage/>}></Route>
         <Route exact path='/register' element={<RegisterPage/>}></Route>
-        <Route exact path='/user' element={<User/>}></Route>
-        <Route exact path='/admin' element={<Admin/>}></Route>
+        <Route exact path='/home' element={<Welcome/>}></Route>
       </Routes>
       </BrowserRouter>
     </div>
