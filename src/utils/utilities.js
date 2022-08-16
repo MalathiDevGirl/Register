@@ -7,7 +7,6 @@ const checkBeforeDate = (value) => {
     const currentDate = new Date();
     return inputDate >= currentDate;
  };
-
 const checkConfirmPassword = value => {
    return password !== value;
 }
@@ -20,11 +19,18 @@ export const nameChangeHandler = (value) => {
     return payload;
 }
 
-export const dateChangeHandler = (value) => {
-   
+export const dateChangeHandler = (value) => {   
     const payload = {
         value : value,
         error: checkBeforeDate(value)
+    };
+    return payload;
+}
+
+export const genderChangeHandler = (value) => {   
+    const payload = {
+        value : value,
+        error: isEmpty(value)
     };
     return payload;
 }
@@ -37,8 +43,7 @@ export const emailChangeHandler = (value) => {
     return payload;
 }
 
-export const passwordChangeHandler = (value) => {
-   
+export const passwordChangeHandler = (value) => {   
     const payload = {
         value : value,
         error: checkPassword(value)
@@ -47,8 +52,7 @@ export const passwordChangeHandler = (value) => {
     return payload;
 }
 
-export const confirmPasswordChangeHandler = (value) => {
-   
+export const confirmPasswordChangeHandler = (value) => {   
     const payload = {
         value : value,
         error: checkConfirmPassword(value)
@@ -56,10 +60,12 @@ export const confirmPasswordChangeHandler = (value) => {
     return payload;
 }
 
+export const hasNoError = (formData) => {
+    const returnValue =((Object.values(formData)).every((value)=>{return value.error === false}));
+    console.log(returnValue);
+   return returnValue;
+};
 
-export const register = () => {
-    console.log("Register");
-}
 export const signin = () => {
     console.log("SignIn");
 }

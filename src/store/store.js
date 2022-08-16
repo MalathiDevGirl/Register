@@ -1,6 +1,13 @@
-import {configureStore} from '@reduxjs/toolkit';
-import slice from './inputSlice';
+import {configureStore, combineReducers} from '@reduxjs/toolkit';
+import registerSlice from './registerSlice';
+import signInSlice from './signInSlice';
+import storageSlice from './storage';
+const rootReducer = combineReducers ({
+    registerSlice,
+    signInSlice,
+    storageSlice
+})
 const store = configureStore({
-    reducer : slice
+    reducer : rootReducer
 });
 export default store;

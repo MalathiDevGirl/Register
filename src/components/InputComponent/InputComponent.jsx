@@ -1,7 +1,8 @@
 import './input.style.css';
-import { registerActions } from '../../store/inputSlice';
+import { registerActions } from '../../store/registerSlice';
 import * as utilities from '../../utils/utilities';
 import { useDispatch } from "react-redux";
+import { signInActions } from '../../store/signInSlice';
 
 const InputComponent  = (props) => {
     const dispatch = useDispatch();
@@ -17,6 +18,11 @@ const InputComponent  = (props) => {
             payload = utilities.dateChangeHandler(e.target.value);            
             dispatch(registerActions.date(payload));
             break;
+        case "gender":
+            payload = utilities.genderChangeHandler(e.target.value);
+            dispatch(registerActions.gender(payload));
+            console.log(payload);
+            break;
         case "email": 
             payload = utilities.emailChangeHandler(e.target.value);            
             dispatch(registerActions.email(payload));
@@ -28,6 +34,14 @@ const InputComponent  = (props) => {
         case "confirmPassword": 
             payload = utilities.confirmPasswordChangeHandler(e.target.value);            
             dispatch(registerActions.confirmPassword(payload));
+            break;
+        case "userEmail": 
+            payload = utilities.emailChangeHandler(e.target.value);            
+            dispatch(signInActions.userEmail(payload));
+            break;
+        case "userPassword": 
+            payload = utilities.passwordChangeHandler(e.target.value);            
+            dispatch(signInActions.userPassword(payload));
             break;
         default:
             return '';
