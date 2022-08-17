@@ -6,3 +6,8 @@ export const defaultRegisterInput = {
     password: {value: '', error:false},
     confirmPassword: {value: '', error:false},
 };
+
+export const defaultSignInInput = {    
+    userEmail: {value: '', error:false},
+    userPassword: {value: '', error:false}
+};

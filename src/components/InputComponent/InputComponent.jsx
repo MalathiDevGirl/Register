@@ -21,11 +21,10 @@ const InputComponent  = (props) => {
         case "gender":
             payload = utilities.genderChangeHandler(e.target.value);
             dispatch(registerActions.gender(payload));
-            console.log(payload);
             break;
         case "email": 
             payload = utilities.emailChangeHandler(e.target.value);            
-            dispatch(registerActions.email(payload));
+            dispatch(registerActions.email(payload));   
             break;
         case "password": 
             payload = utilities.passwordChangeHandler(e.target.value);            
@@ -36,7 +35,7 @@ const InputComponent  = (props) => {
             dispatch(registerActions.confirmPassword(payload));
             break;
         case "userEmail": 
-            payload = utilities.emailChangeHandler(e.target.value);            
+            payload = utilities.userEmailChangeHandler(e.target.value);
             dispatch(signInActions.userEmail(payload));
             break;
         case "userPassword": 

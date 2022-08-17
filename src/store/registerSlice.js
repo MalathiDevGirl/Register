@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { defaultRegisterInput } from '../utils/constants'
+import { defaultRegisterInput } from '../utils/constants';
 
 
 

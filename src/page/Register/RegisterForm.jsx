@@ -2,7 +2,7 @@ import InputComponent from "../../components/InputComponent/InputComponent";
 import ButtonContainerComponent from "../../components/ButtonComponent/ButtonContainerComponent";
 import ErrorComponent from "../../components/ErrorComponent/ErrorComponent";
 import { useSelector } from "react-redux";
-import "./style.css";
+import "../style.css";
 
 const listOfGenders = ['Female','Male'];
 
@@ -46,7 +46,7 @@ const RegisterForm = () => {
         value={input.registerSlice.email.value}
       />
       {input.registerSlice.email.error && (
-        <ErrorComponent message={"Invalid Email"} />
+        <ErrorComponent message={"Emai is already exists"} />
       )}
 
       <InputComponent

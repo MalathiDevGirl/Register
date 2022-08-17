@@ -21,4 +21,7 @@ th, td {
 }
 .action-button {
     width:20px;
-  }
+}
+tbody{
+  align-items: center;
+}

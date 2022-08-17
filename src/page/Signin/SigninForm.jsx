@@ -1,12 +1,11 @@
 import ButtonContainerComponent from "../../components/ButtonComponent/ButtonContainerComponent";
 import InputComponent from "../../components/InputComponent/InputComponent";
 import { useSelector } from "react-redux";
-import "./style.css";
+import "../style.css";
 import ErrorComponent from "../../components/ErrorComponent/ErrorComponent";
 
 const SigninForm = () => {
-  const input = useSelector((state) => state);
-
+  const input = useSelector((state) => state.signInSlice);
   return (
     <div className="form">
       <h2>Sign in</h2>
@@ -14,18 +13,18 @@ const SigninForm = () => {
         type={"email"}
         name={"userEmail"}
         placeholder={"Email"}
-        value={input.signInSlice.userEmail.value}
+        value={input.userEmail.value}
       />
-       {input.signInSlice.userEmail.error && (
+       {input.userEmail.error && (
         <ErrorComponent message={"Invalid Email"} />
       )}
       <InputComponent
         type={"password"}
         name={"userPassword"}
         placeholder={"Password"}
-        value={input.signInSlice.userPassword.value}
+        value={input.userPassword.value}
       />
-       {input.signInSlice.userPassword.error && (
+       {input.userPassword.error && (
         <ErrorComponent message={"Password must contain 8 characters"} />
       )}
       <ButtonContainerComponent
