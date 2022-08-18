@@ -1,13 +1,19 @@
 import InputComponent from "../../components/InputComponent/InputComponent";
 import ButtonContainerComponent from "../../components/ButtonComponent/ButtonContainerComponent";
 import ErrorComponent from "../../components/ErrorComponent/ErrorComponent";
+import { getLocalStorageSingleItem } from '../../utils/utilities';
 import { useSelector } from "react-redux";
+import { useParams } from 'react-router-dom';
+
 import "../style.css";
 
 const listOfGenders = ['Female','Male'];
 
 const RegisterForm = () => {
-  const input = useSelector((state) => state);
+  const input = useSelector((state) => state);  
+  let  {id}  = useParams();
+  console.log(id);
+  console.log(getLocalStorageSingleItem("existingData",id));
 
   return (
     <div className="form">

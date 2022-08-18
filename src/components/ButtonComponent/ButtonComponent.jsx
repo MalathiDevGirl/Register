@@ -38,7 +38,7 @@ const registerHandler = (data,event) => {
                 "date": data.date.value,
                 "gender": data.gender.value,
                 "email": data.email.value,
-                "password": data.password.value,
+                "password": window.btoa(data.password.value),
                 "status": "Added",
             }
             localStorage.setItem("entryData", JSON.stringify(entryData));
@@ -84,7 +84,7 @@ const signinHandler = (data,event) => {
                 }
                 else{
                 const userData = existingData.filter((value) => {
-                    return value.email === data.userEmail.value && value.password === data.userPassword.value && value.status ==="Added";
+                    return value.email === data.userEmail.value && window.atob(value.password) === data.userPassword.value && value.status ==="Added";
                 })                
                     if(userData.length > 0){
                         alert("Welcome");

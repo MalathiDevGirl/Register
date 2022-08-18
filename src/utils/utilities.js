@@ -3,10 +3,13 @@ const isEmpty = value => value.trim() === '';
 const checkPassword = value => value.length !== 8;
 const validEmail = value =>!value.includes('@');
 
-const isEmail = (email) => {
+const existEmail = (email) => {
     const existingData = getLocalStorage("existingData");
     let checkEmail;
-    if(existingData !== null){
+    if(email === "admin@gmail.com"){
+        checkEmail = true;
+    }
+    else if(existingData !== null){
         checkEmail = existingData.some((value) => {
             return value.email === email;
         })
@@ -30,6 +33,17 @@ export const getLocalStorage = (itemName) => {
     return JSON.parse(localStorage.getItem(itemName));
 }
 
+export const getLocalStorageSingleItem = (itemName, id) => {
+    const existingData = getLocalStorage(itemName);
+    const getSingleItem =  existingData.filter((data) => {
+        return data.id === id;
+    });
+    return getSingleItem; 
+       
+}
+
+
+/*  ------ Start: Update status value in local storage data ------ */
 export const updateLocalStorageItem = (id,statusValue) => {
     let existingData = getLocalStorage("existingData");
         existingData = existingData.map((data) => {
@@ -43,6 +57,7 @@ export const updateLocalStorageItem = (id,statusValue) => {
         })
     setLocalStorageItem("existingData",existingData);
 }
+/*  ------ End: Update status value in local storage data ------ */
 
 export const setLocalStorageItem = (itemName, data) =>{
 localStorage.setItem(itemName, JSON.stringify(data));
@@ -75,7 +90,7 @@ export const genderChangeHandler = (value) => {
 export const emailChangeHandler = (value) => {
     const payload = {
         value : value,
-        error: isEmail(value)
+        error: existEmail(value)
     };
     return payload;
 }
