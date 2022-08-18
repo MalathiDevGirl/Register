@@ -40,6 +40,7 @@ const registerHandler = (data,event) => {
                 "email": data.email.value,
                 "password": window.btoa(data.password.value),
                 "status": "Added",
+                "LoginStatus": "Offline",
             }
             localStorage.setItem("entryData", JSON.stringify(entryData));
             existingData.push(entryData);

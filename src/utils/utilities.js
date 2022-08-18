@@ -44,13 +44,13 @@ export const getLocalStorageSingleItem = (itemName, id) => {
 
 
 /*  ------ Start: Update status value in local storage data ------ */
-export const updateLocalStorageItem = (id,statusValue) => {
+export const updateLocalStorageItem = (id,key,value) => {
     let existingData = getLocalStorage("existingData");
         existingData = existingData.map((data) => {
             if(data.id === id){
                 return {
                     ...data,
-                    status: statusValue,
+                    [key]: value,
                 }
             }
         return data;

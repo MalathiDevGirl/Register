@@ -18,13 +18,11 @@ const TableComponent = () => {
     }
     const deleteHandler = (id) => {
         setActionType('Deleted');
-        console.log(actionType);
-       updateLocalStorageItem(id,'Deleted');
+       updateLocalStorageItem(id,'status','Deleted');
     }
     const addHandler = (id) => {
         setActionType('Added');
-        console.log(actionType);
-       updateLocalStorageItem(id,'Added');
+       updateLocalStorageItem(id,'status','Added');
     }
 
     useEffect( ()=>{
