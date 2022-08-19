@@ -1,7 +1,7 @@
 import RegisterPage from './page/Register/RegisterPage';
 import SigninPage from './page/Signin/SigninPage';
 import {BrowserRouter,Route,Routes} from 'react-router-dom';
-import Welcome from './page/Welcome';
+import Welcome from './page/Welcome/Welcome';
 function App() {
   return (
       <BrowserRouter>

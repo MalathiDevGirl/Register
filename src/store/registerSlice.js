@@ -41,6 +41,16 @@ const registerSlice = createSlice({
             state.email = action.payload.email;
             state.password = action.payload.password;
             state.confirmPassword = action.payload.confirmPassword;
+        },
+        inputEdit(state,action){
+            state.name.value = action.payload.name;
+            state.email.value = action.payload.email;
+            state.address.value = action.payload.address;
+            state.blood.value = action.payload.blood;
+            state.center.value = action.payload.center;
+            state.gender.value = action.payload.gender;
+            state.expierence.value = action.payload.expierence;
+            state.dateOfBirth.value = action.payload.dateOfBirth;
         }
     }
 });

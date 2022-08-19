@@ -3,21 +3,21 @@ import ButtonContainerComponent from "../../components/ButtonComponent/ButtonCon
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import ErrorComponent from "../../components/ErrorComponent/ErrorComponent";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { registerActions } from '../../store/registerSlice';
 import { defaultRegisterInput } from '../../store/constants';
-import {hasNoError, getLocalStorage, setLocalStorageItem} from '../../utils/utilities';
+import { hasNoError, getLocalStorage, setLocalStorageItem } from '../../utils/utilities';
 import * as utilities from '../../utils/utilities';
-
 //import { useParams } from 'react-router-dom';
-import "../style.css";
 
 const listOfGenders = ['Female', 'Male'];
 
-const RegisterForm = () => {
+const RegisterForm = (props) => {
+
+  console.log(props);
   const input = useSelector((state) => state.registerSlice);
   const dispatch = useDispatch();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   let payload;
   //let  {id}  = useParams();
   //console.log(id);
@@ -54,54 +54,55 @@ const RegisterForm = () => {
     }
   }
 
-const registerHandler = (data,event) => {   
-    event.preventDefault();    
-        for (var key in data) {
-            if (
-                data[key].value === "" ||
-                data[key].value.length === 0
-            ) {
-            const payload = { key: key, error: true };
-            dispatch(registerActions.key(payload));
-            return;
-            }
-        }
-    
-        if(hasNoError(data)) {
-            let existingData =  getLocalStorage("existingData");
-            if(existingData === null) {
-                existingData = [];
-            }
-            let entryData = {
-                "id": existingData.length + 1,
-                "name": data.name.value,
-                "date": data.date.value,
-                "gender": data.gender.value,
-                "email": data.email.value,
-                "password": window.btoa(data.password.value),
-                "status": "Added",
-            }
-            setLocalStorageItem("entryData", entryData);
-            existingData.push(entryData);
-            setLocalStorageItem("existingData", existingData);
-            dispatch(registerActions.inputClear(defaultRegisterInput));    
-            navigate('/') 
-        } 
-}
+  const registerHandler = (data, event) => {
+    event.preventDefault();
+    for (var key in data) {
+      if (
+        data[key].value === "" ||
+        data[key].value.length === 0
+      ) {
+        const payload = { key: key, error: true };
+        dispatch(registerActions.key(payload));
+        return;
+      }
+    }
 
-const signinHandler = (event) => {
-    event.preventDefault();  
-    dispatch(registerActions.inputClear(defaultRegisterInput)); 
+    if (hasNoError(data)) {
+      let existingData = getLocalStorage("existingData");
+      if (existingData === null) {
+        existingData = [];
+      }
+      let entryData = {
+        "id": existingData.length + 1,
+        "name": data.name.value,
+        "date": data.date.value,
+        "gender": data.gender.value,
+        "email": data.email.value,
+        "password": window.btoa(data.password.value),
+        "status": "Added",
+      }
+      setLocalStorageItem("entryData", entryData);
+      existingData.push(entryData);
+      setLocalStorageItem("existingData", existingData);
+      dispatch(registerActions.inputClear(defaultRegisterInput));
+      navigate('/')
+    }
+  }
+
+  const signinHandler = (event) => {
+    event.preventDefault();
+    dispatch(registerActions.inputClear(defaultRegisterInput));
     navigate('/');
-}
+  }
 
-const buttonClick = (e) => {
-    e.target.value === "Sign in" ? signinHandler(e) :registerHandler(input,e);
-}
+  const buttonClick = (e) => {
+    e.target.value === "Sign in" ? signinHandler(e) : registerHandler(input, e);
+  }
 
   return (
     <div className="form">
-      <h2>Registration</h2>
+      <h2>Registration   {props.editForm ? <span className="close" onClick={props.closeForm }>X</span> : null} </h2>
+    
       <InputComponent name={"name"}
         type={"text"}
         placeholder={"Name"}
@@ -159,16 +160,20 @@ const buttonClick = (e) => {
       )}
 
       <ButtonContainerComponent>
-        <ButtonComponent
-          className="primary"
-          value="Register"
-          buttonClick = {buttonClick}
-        />
-        <ButtonComponent
-          className="secondary"
+        {props.buttonValue === "Edit" ?
+          <ButtonComponent className="primary edit-primary"
+            value={props.buttonValue}
+            buttonClick={buttonClick} />
+          :
+          <ButtonComponent className="primary"
+            value="Register"
+            buttonClick={buttonClick} />}
+
+
+        {props.editForm ? null : <ButtonComponent className="secondary"
           value="Sign in"
-          buttonClick = {buttonClick}
-        />
+          buttonClick={buttonClick} />}
+
       </ButtonContainerComponent>
     </div>
   );

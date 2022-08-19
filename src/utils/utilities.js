@@ -38,8 +38,7 @@ export const getLocalStorageSingleItem = (itemName, id) => {
     const getSingleItem =  existingData.filter((data) => {
         return data.id === id;
     });
-    return getSingleItem; 
-       
+    return getSingleItem;        
 }
 
 

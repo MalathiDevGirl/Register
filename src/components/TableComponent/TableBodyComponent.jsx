@@ -1,36 +1,12 @@
 import {ReactComponent as EditSvg} from '../../assests/edit.svg';
 import {ReactComponent as DeleteSvg} from '../../assests/delete.svg';
 import {ReactComponent as AddSvg} from '../../assests/add.svg';
-import { getLocalStorage, updateLocalStorageItem} from '../../utils/utilities';
-import { useNavigate  } from "react-router-dom";
-import { useEffect, useState } from 'react';
+import { getLocalStorage} from '../../utils/utilities';
 import './table.style.css';
 
-const TableBodyComponent = () => {
 
-            
-    const navigate = useNavigate(); 
+const TableBodyComponent = (props) => {       
     const tableData = getLocalStorage("existingData");
-    const [actionType, setActionType] = useState('');
-
-
-    useEffect( ()=>{
-    },[actionType]);
-
-    const editHandler = (id) => {
-        console.log("Edited");        
-        navigate(`/register/${id}`);
-    }
-
-    const deleteHandler = (id) => {
-        setActionType('Deleted');
-       updateLocalStorageItem(id,'status','Deleted');
-    }
-
-    const addHandler = (id) => {
-        setActionType('Added');
-       updateLocalStorageItem(id,'status','Added');
-    }
 
     const getTableRowData =  () =>{
         if(tableData !== null){
@@ -44,9 +20,9 @@ const TableBodyComponent = () => {
                     <td>{data.email}</td>
                     <td>{data.password}</td>
                     <td className={statusClass}>{data.status}</td>
-                    <td><EditSvg className="action-button" onClick={()=>editHandler(data.id)}/> </td>
-                    <td>{(data.status !== "Deleted") ? <DeleteSvg className="action-button" onClick={()=>deleteHandler(data.id)}/> : 
-                    <AddSvg className="action-button" onClick={()=>addHandler(data.id)}/> }</td>
+                    <td><EditSvg className="action-button" onClick={()=>props.editClick(data.id)}/> </td>
+                    <td>{(data.status !== "Deleted") ? <DeleteSvg className="action-button" onClick={()=>props.deleteClick(data.id)}/> : 
+                    <AddSvg className="action-button" onClick={()=>props.addClick(data.id)}/> }</td>
                  </tr>);
             }));     
         return showTableData;            

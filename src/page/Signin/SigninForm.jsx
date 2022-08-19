@@ -8,7 +8,6 @@ import * as utilities from '../../utils/utilities';
 import {hasNoError, getLocalStorage} from '../../utils/utilities';
 import { defaultSignInInput } from '../../store/constants';
 import { signInActions } from '../../store/signInSlice';
-import "../style.css";
 
 const SigninForm = () => {
   const input = useSelector((state) => state.signInSlice);
