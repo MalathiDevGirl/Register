@@ -8,7 +8,6 @@ function App() {
       <Routes>
         <Route exact path='/' element={<SigninPage/>}></Route>
         <Route exact path='/register' element={<RegisterPage/>}></Route>
-        <Route exact path='/register/:id' element={<RegisterPage/>}></Route>
         <Route exact path='/welcome' element={<Welcome/>}></Route>
       </Routes>
       </BrowserRouter>

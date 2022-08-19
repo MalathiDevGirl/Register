@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { defaultSignInInput } from '../utils/constants';
+import { defaultSignInInput } from './constants';
 
 const signInSlice = createSlice({
     name: "signin",
