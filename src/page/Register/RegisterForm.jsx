@@ -3,176 +3,206 @@ import ButtonContainerComponent from "../../components/ButtonComponent/ButtonCon
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import ErrorComponent from "../../components/ErrorComponent/ErrorComponent";
 import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerActions } from '../../store/registerSlice';
+import { storeActions } from '../../store/storageSlice';
 import { defaultRegisterInput } from '../../store/constants';
-import { hasNoError, getLocalStorage, setLocalStorageItem } from '../../utils/utilities';
-import * as utilities from '../../utils/utilities';
+import { hasNoError, getLocalStorage, setLocalStorageItem, updateSingleItem, passwordChangeHandler, confirmPasswordChangeHandler,
+nameChangeHandler, dateChangeHandler, genderChangeHandler, emailChangeHandler, isEmptyObject} from '../../utils/utilities';
 //import { useParams } from 'react-router-dom';
 
 const listOfGenders = ['Female', 'Male'];
 
 const RegisterForm = (props) => {
 
-  console.log(props);
   const input = useSelector((state) => state.registerSlice);
+  const {name,date,gender,email,password,confirmPassword} = input;
+  const {storeData} = storeActions;
+  const {nameAction,dateAction,genderAction,emailAction,passwordAction,confirmPasswordAction,error,inputClear,inputEdit} = registerActions;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let payload;
-  //let  {id}  = useParams();
-  //console.log(id);
-  // console.log(getLocalStorageSingleItem("existingData",id));
 
-  const inputChange = (e) => {
-    switch (e.target.name) {
+  useEffect(() => {
+    (!(isEmptyObject(props)))
+      ? fetchData()
+      : dispatch(inputClear(defaultRegisterInput));
+  }, [props.userData]);
+
+  const fetchData = () => {
+    dispatch(inputEdit(props.userData));
+  }
+
+  const inputChange = (event) => {
+    switch (event.target.name) {
       case "name":
-        payload = utilities.nameChangeHandler(e.target.value);
-        dispatch(registerActions.name(payload));
+        payload = nameChangeHandler(event.target.value);
+        dispatch(nameAction(payload));
         break;
       case "date":
-        payload = utilities.dateChangeHandler(e.target.value);
-        dispatch(registerActions.date(payload));
+        payload = dateChangeHandler(event.target.value);
+        dispatch(dateAction(payload));
         break;
       case "gender":
-        payload = utilities.genderChangeHandler(e.target.value);
-        dispatch(registerActions.gender(payload));
+        payload = genderChangeHandler(event.target.value);
+        dispatch(genderAction(payload));
         break;
       case "email":
-        payload = utilities.emailChangeHandler(e.target.value);
-        dispatch(registerActions.email(payload));
+        payload = emailChangeHandler(event.target.value);
+        dispatch(emailAction(payload));
         break;
       case "password":
-        payload = utilities.passwordChangeHandler(e.target.value);
-        dispatch(registerActions.password(payload));
+        payload = passwordChangeHandler(event.target.value);
+        dispatch(passwordAction(payload));
         break;
       case "confirmPassword":
-        payload = utilities.confirmPasswordChangeHandler(e.target.value);
-        dispatch(registerActions.confirmPassword(payload));
+        payload = confirmPasswordChangeHandler(event.target.value);
+        dispatch(confirmPasswordAction(payload));
         break;
       default:
         return '';
     }
   }
 
-  const registerHandler = (data, event) => {
+
+  const registerHandler = (event) => {
     event.preventDefault();
-    for (var key in data) {
+    
+    for (var key in input) {
       if (
-        data[key].value === "" ||
-        data[key].value.length === 0
+        input[key].value === "" ||
+        input[key].value.length === 0  
       ) {
-        const payload = { key: key, error: true };
-        dispatch(registerActions.key(payload));
-        return;
+      const payload = {key, error: true };
+      dispatch(error(payload));
+      return true;
       }
     }
 
-    if (hasNoError(data)) {
+    //confirmPasswordChangeHandler(password.value,confirmPassword.value);
+
+    if (hasNoError(input)) {
       let existingData = getLocalStorage("existingData");
       if (existingData === null) {
         existingData = [];
       }
       let entryData = {
-        "id": existingData.length + 1,
-        "name": data.name.value,
-        "date": data.date.value,
-        "gender": data.gender.value,
-        "email": data.email.value,
-        "password": window.btoa(data.password.value),
+        "name": name.value,
+        "date": date.value,
+        "gender": gender.value,
+        "email": email.value,
+        "password": window.btoa(password.value),
         "status": "Added",
       }
-      setLocalStorageItem("entryData", entryData);
-      existingData.push(entryData);
-      setLocalStorageItem("existingData", existingData);
-      dispatch(registerActions.inputClear(defaultRegisterInput));
-      navigate('/')
+
+      if(!(isEmptyObject(props))) {
+          entryData = {
+            ...entryData,
+            "id": props.userData.id,         
+        }
+        setLocalStorageItem("entryData", entryData);
+        updateSingleItem(props.userData.id,entryData);       
+        dispatch(inputClear(defaultRegisterInput));
+        props.closeForm();
+      } 
+      else {
+        entryData = {
+          ...entryData,
+          "id": existingData.length + 1,
+        }        
+        setLocalStorageItem("entryData", entryData);
+        existingData.push(entryData);
+        setLocalStorageItem("existingData", existingData);
+        dispatch(storeData(existingData));
+        dispatch(inputClear(defaultRegisterInput));
+        navigate('/')
+      } 
+
     }
   }
 
   const signinHandler = (event) => {
     event.preventDefault();
-    dispatch(registerActions.inputClear(defaultRegisterInput));
+    dispatch(inputClear(defaultRegisterInput));
     navigate('/');
   }
 
-  const buttonClick = (e) => {
-    e.target.value === "Sign in" ? signinHandler(e) : registerHandler(input, e);
-  }
 
   return (
     <div className="form">
       <h2>Registration   {props.editForm ? <span className="close" onClick={props.closeForm }>X</span> : null} </h2>
     
-      <InputComponent name={"name"}
-        type={"text"}
-        placeholder={"Name"}
-        value={input.name.value}
+      <InputComponent name="name"
+        type="text"
+        placeholder="Name"
+        value={name.value}
         inputChange={inputChange} />
-      {input.name.error && (
-        <ErrorComponent message={"Name must not be empty"} />
+      {name.error && (
+        <ErrorComponent message="Name must not be empty" />
       )}
 
-      <InputComponent name={"date"}
-        type={"date"}
-        placeholder={"Date"}
-        value={input.date.value}
+      <InputComponent name="date"
+        type="date"
+        placeholder="Date"
+        value={date.value}
         inputChange={inputChange}
       />
-      {input.date.error && (
-        <ErrorComponent message={"Date must be before today"} />
+      {date.error && (
+        <ErrorComponent message="Date must be before today"/>
       )}
 
       <p>Please select Gender</p>
       {listOfGenders.map((genderValue) => {
-        return <InputComponent key={genderValue} type={"radio"} name={"gender"} placeholder={genderValue} value={genderValue} inputChange={inputChange}
+        return <InputComponent key={genderValue} type="radio" name="gender" placeholder={genderValue} value={genderValue} inputChange={inputChange}
         />
       })}
       <br />
 
-      <InputComponent name={"email"}
-        type={"email"}
-        placeholder={"Email"}
-        value={input.email.value}
+      <InputComponent name="email"
+        type="email"
+        placeholder="Email"
+        value={email.value}
         inputChange={inputChange}
       />
-      {input.email.error && (
-        <ErrorComponent message={"Emai is already exists"} />
+      {email.error && (
+        <ErrorComponent message="Emai is already exists" />
       )}
 
-      <InputComponent name={"password"}
-        type={"password"}
-        placeholder={"Password"}
-        value={input.password.value}
+      <InputComponent name="password"
+        type="password"
+        placeholder="Password"
+        value={password.value}
         inputChange={inputChange}
       />
-      {input.password.error && (
-        <ErrorComponent message={"Password must contains 8 characters"} />
+      {password.error && (
+        <ErrorComponent message="Password must contains 8 characters" />
       )}
 
-      <InputComponent name={"confirmPassword"}
-        type={"password"}
-        placeholder={"Confirm Password"}
-        value={input.confirmPassword.value}
+      <InputComponent name="confirmPassword"
+        type="password"
+        placeholder="Confirm Password"
+        value={confirmPassword.value}
         inputChange={inputChange}
       />
-      {input.confirmPassword.error && (
-        <ErrorComponent message={"Password not matched"} />
+      {confirmPassword.error && (
+        <ErrorComponent message="Password not matched" />
       )}
 
       <ButtonContainerComponent>
         {props.buttonValue === "Edit" ?
           <ButtonComponent className="primary edit-primary"
             value={props.buttonValue}
-            buttonClick={buttonClick} />
+            onClick={registerHandler} />
           :
           <ButtonComponent className="primary"
             value="Register"
-            buttonClick={buttonClick} />}
+            onClick={registerHandler} />}
 
 
         {props.editForm ? null : <ButtonComponent className="secondary"
           value="Sign in"
-          buttonClick={buttonClick} />}
+          onClick={signinHandler} />}
 
       </ButtonContainerComponent>
     </div>

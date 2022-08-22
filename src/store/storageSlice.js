@@ -1,13 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
+import {getLocalStorage} from '../utils/utilities';
 
-const data = [];
 
 const storageSlice = createSlice({
     name: "storeData",
-    initialState: data,
+    initialState: getLocalStorage('existingData'),
     reducers: {
         storeData(state,action){
-
+            const payload = action.payload;
+            state = payload;
+            console.log(state);
         }
     }
 });

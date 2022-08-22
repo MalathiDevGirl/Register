@@ -4,26 +4,30 @@ import ButtonContainerComponent from "../../components/ButtonComponent/ButtonCon
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate  } from "react-router-dom";
-import * as utilities from '../../utils/utilities';
-import {hasNoError, getLocalStorage} from '../../utils/utilities';
-import { defaultSignInInput } from '../../store/constants';
+import {hasNoError, getLocalStorage, userEmailChangeHandler,passwordChangeHandler,setSessionStorage} from '../../utils/utilities';
+import { defaultSignInInput, adminEmail, adminPasword} from '../../store/constants';
 import { signInActions } from '../../store/signInSlice';
 
 const SigninForm = () => {
-  const input = useSelector((state) => state.signInSlice);
+  const input = useSelector((state) => state.signInSlice);  
+  const storeData = useSelector((state) => state);  
+  console.log(storeData);
+  const {userEmail,userPassword} = input;
+  const {email,password,inputClear,error} = signInActions;
+
   const dispatch = useDispatch();
   const navigate = useNavigate(); 
   let payload;
 
-const inputChange = (e) => {
-    switch (e.target.name) {
+const inputChange = (event) => {
+    switch (event.target.name) {
       case "userEmail": 
-            payload = utilities.userEmailChangeHandler(e.target.value);
-            dispatch(signInActions.userEmail(payload));
+            payload = userEmailChangeHandler(event.target.value);
+            dispatch(email(payload));
             break;
       case "userPassword": 
-            payload = utilities.passwordChangeHandler(e.target.value);            
-            dispatch(signInActions.userPassword(payload));
+            payload = passwordChangeHandler(event.target.value);            
+            dispatch(password(payload));
             break;
       default:
             return '';
@@ -32,50 +36,52 @@ const inputChange = (e) => {
 
 const registerHandler = (event) => {   
     event.preventDefault();
-    dispatch(signInActions.inputClear(defaultSignInInput)); 
+    dispatch(inputClear(defaultSignInInput)); 
     navigate('/register');
 }
 
-const signinHandler = (data,event) => {
+const signinHandler = (event) => {
     event.preventDefault();  
-    if(data.userEmail.value === "admin@gmail.com" && data.userPassword.value === "admin123"){
-            dispatch(signInActions.inputClear(defaultSignInInput));
+    setSessionStorage('loginUser','{loginStatus: true}' );
+    if(userEmail.value === adminEmail && userPassword.value === adminPasword){
+            dispatch(inputClear(defaultSignInInput));
+            console.log(sessionStorage.getItem('loginUser'));
             navigate('/welcome',{state:{userType:'admin'}});
             return;
     }
     else {
-            for (var key in data) {
-                if (
-                    data[key].value === "" ||
-                    data[key].value.length === 0
-                ) {
-                const payload = { key: key, error: true };
-                dispatch(signInActions.key(payload));
-                return;
-                }
-            } 
+          for (var key in input) {
+            if (
+              input[key].value === "" ||
+              input[key].value.length === 0
+            ) {
+            const payload = {key, error: true };
+            dispatch(error(payload));
+            return true;
+            }
+          }
 
-            if(hasNoError(data)) {
+            if(hasNoError(input)) {
                 let existingData = getLocalStorage("existingData");
                 if(existingData === null) {
                 alert("Kindly Register");
-                dispatch(signInActions.inputClear(defaultSignInInput));
+                dispatch(inputClear(defaultSignInInput));
                 navigate('/register');
                 return;
                 }
                 else{
                 const userData = existingData.filter((value) => {
-                    return value.email === data.userEmail.value && window.atob(value.password) === data.userPassword.value && value.status ==="Added";
+                    return value.email === userEmail.value && window.atob(value.password) === userPassword.value && value.status ==="Added";
                 })                
                     if(userData.length > 0){
                         alert("Welcome");
-                        dispatch(signInActions.inputClear(defaultSignInInput));
+                        dispatch(inputClear(defaultSignInInput));
                         navigate('/welcome',{state:{userType:'user', ...userData[0]}});
                         return;
                     }
                     else {
                         alert("Kindly register first");
-                        dispatch(signInActions.inputClear(defaultSignInInput));
+                        dispatch(inputClear(defaultSignInInput));
                         navigate('/register');
                         return;
                     }   
@@ -84,42 +90,38 @@ const signinHandler = (data,event) => {
     }
 }
 
-const buttonClick = (e) => {
-  e.target.value === "Sign in" ? signinHandler(input,e) :registerHandler(e);
-}
-
   return (
     <div className="form">
       <h2>Sign in</h2>
-      <InputComponent name={"userEmail"}
-        type={"email"}
-        placeholder={"Email"}
-        value={input.userEmail.value}
+      <InputComponent name="userEmail"
+        type="email"
+        placeholder="Email"
+        value={userEmail.value}
         inputChange={inputChange}
       />
-       {input.userEmail.error && (
-        <ErrorComponent message={"Invalid Email"} />
+       {userEmail.error && (
+        <ErrorComponent message="Invalid Email" />
       )}
-      <InputComponent name={"userPassword"}
-        type={"password"}
-        placeholder={"Password"}
-        value={input.userPassword.value}
+      <InputComponent name="userPassword"
+        type="password"
+        placeholder="Password"
+        value={userPassword.value}
         inputChange={inputChange}
       />
-       {input.userPassword.error && (
-        <ErrorComponent message={"Password must contain 8 characters"} />
+       {userPassword.error && (
+        <ErrorComponent message="Password must contain 8 characters" />
       )}
       
       <ButtonContainerComponent>
         <ButtonComponent
           className="primary"
           value="Sign in"
-          buttonClick = {buttonClick}
+          onClick = {signinHandler}
         />
         <ButtonComponent
           className="secondary"
           value="Register"
-          buttonClick = {buttonClick}
+          onClick = {registerHandler}
         />
       </ButtonContainerComponent>
 

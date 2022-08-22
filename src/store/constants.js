@@ -11,3 +11,5 @@ export const defaultSignInInput = {
     userEmail: {value: '', error:false},
     userPassword: {value: '', error:false}
 };
+export const adminEmail = "admin@gmail.com";
+export const adminPasword = "admin123";

@@ -1,7 +1,7 @@
 import CardComponent from '../CardComponent/CardComponent';
 import TableHeaderComponent from './TableHeaderComponent';
 import TableBodyComponent from './TableBodyComponent';
-import { updateLocalStorageItem, getLocalStorageSingleItem} from '../../utils/utilities';
+import { updateStatusLocalStorageItem, getLocalStorageSingleItem} from '../../utils/utilities';
 import { useEffect, useState } from 'react';
 import './table.style.css';
 import RegisterForm from '../../page/Register/RegisterForm';
@@ -19,7 +19,6 @@ const TableComponent = () => {
         setActionType('Edited');
         setShowForm(true);
         setUserData(getLocalStorageSingleItem("existingData",id));
-        console.log(userData);
     }
 
     const closeForm = () =>{
@@ -28,12 +27,12 @@ const TableComponent = () => {
 
     const deleteClick = (id) => {
         setActionType('Deleted');
-       updateLocalStorageItem(id,'status','Deleted');
+        updateStatusLocalStorageItem(id,'status','Deleted');
     }
 
     const addClick = (id) => {
         setActionType('Added');
-       updateLocalStorageItem(id,'status','Added');
+        updateStatusLocalStorageItem(id,'status','Added');
     }
 
     return (        
