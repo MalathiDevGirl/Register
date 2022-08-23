@@ -98,7 +98,7 @@ const RegisterForm = (props) => {
           entryData = {
             ...entryData,
             "id": props.userData.id,               
-            "status":'Added',      
+            "status":props.userData.status,      
         }
         setLocalStorageItem("entryData", entryData);
         dispatch(updateSpecificItem({id : props.userData.id,updatedData: entryData }));
@@ -110,6 +110,7 @@ const RegisterForm = (props) => {
         entryData = {
           ...entryData,
           "id": existingData.length + 1,
+          "status":'Added',   
         }        
         setLocalStorageItem("entryData", entryData);
         existingData.push(entryData);
