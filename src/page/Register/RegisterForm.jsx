@@ -20,6 +20,7 @@ const RegisterForm = (props) => {
   const {nameAction,dateAction,genderAction,emailAction,passwordAction,confirmPasswordAction,error,inputClear,inputEdit} = registerActions;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  //const [disableField, setDisableField] = useState(false);
   let payload;
 
   useEffect(() => {
@@ -97,7 +98,7 @@ const RegisterForm = (props) => {
           entryData = {
             ...entryData,
             "id": props.userData.id,               
-            "status":props.userData.status,      
+            "status":'Added',      
         }
         setLocalStorageItem("entryData", entryData);
         dispatch(updateSpecificItem({id : props.userData.id,updatedData: entryData }));
@@ -183,6 +184,8 @@ const RegisterForm = (props) => {
         placeholder="Confirm Password"
         value={confirmPassword.value}
         inputChange={inputChange}
+       
+      
       />
       {confirmPassword.error && (
         <ErrorComponent message="Password not matched" />
