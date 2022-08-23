@@ -3,7 +3,7 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    height: 750px;
+    height: 100vh;
 }
 .card {
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
@@ -14,25 +14,25 @@
     flex-wrap: wrap;
     justify-content: space-around;
     align-items: center;
-    width: 1200px;
+    width: 70vw;
     padding:30px;
     margin-top: 10px;
 }
 
 @media only screen and (max-width:1024px) {
     .card {
-        width: 850px;
+        width: 90vw;
     }
   }
 @media only screen and (max-width:768px) {
     .card {
-        width: 650px;
+        width: 85vw;
     }
   }
 @media only screen and (max-width:480px) {
     .card {
         justify-content: left;
-        width: 250px;
+        width: 75vw;
         display: block;
     }
   }

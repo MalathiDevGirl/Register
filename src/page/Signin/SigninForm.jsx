@@ -7,17 +7,23 @@ import { useNavigate  } from "react-router-dom";
 import {hasNoError, getLocalStorage, userEmailChangeHandler,passwordChangeHandler,setSessionStorage} from '../../utils/utilities';
 import { defaultSignInInput, adminEmail, adminPasword} from '../../store/constants';
 import { signInActions } from '../../store/signInSlice';
+import { useEffect, useState } from "react";
+
 
 const SigninForm = () => {
   const input = useSelector((state) => state.signInSlice); 
   const {userEmail,userPassword} = input;
   const {email,password,inputClear,error} = signInActions;
-
   const dispatch = useDispatch();
   const navigate = useNavigate(); 
+  const[errorMessage, setErrorMessage] = useState('');
   let payload;
+  useEffect(() => {
+
+  },[errorMessage]);
 
 const inputChange = (event) => {
+  setErrorMessage('');
     switch (event.target.name) {
       case "userEmail": 
             payload = userEmailChangeHandler(event.target.value);
@@ -39,9 +45,10 @@ const registerHandler = (event) => {
 }
 
 const signinHandler = (event) => {
-    event.preventDefault();  
-    setSessionStorage('loginUser','{loginStatus: true}' );
-    if(userEmail.value === adminEmail && userPassword.value === adminPasword){
+   
+    if(userEmail.value === adminEmail && userPassword.value === adminPasword){      
+            event.preventDefault();  
+            setSessionStorage('loginUser','{loginStatus: true}' );
             dispatch(inputClear(defaultSignInInput));
             navigate('/welcome',{state:{userType:'admin'}});
             return;
@@ -61,27 +68,33 @@ const signinHandler = (event) => {
             if(hasNoError(input)) {
                 let existingData = getLocalStorage("existingData");
                 if(existingData === null) {
-                alert("Kindly Register");
-                dispatch(inputClear(defaultSignInInput));
-                navigate('/register');
-                return;
+                  event.preventDefault();  
+                  setErrorMessage("Kindly Register");
+                  dispatch(inputClear(defaultSignInInput));
+                  navigate('/register');
+                  return;
                 }
                 else{
                 const userData = existingData.filter((value) => {
-                    return value.email === userEmail.value && window.atob(value.password) === userPassword.value && value.status ==="Added";
-                })                
-                    if(userData.length > 0){
-                        alert("Welcome");
+                    return value.email === userEmail.value  && value.status ==="Added";
+                })
+                    if(userData.length > 0 &&  window.atob(userData[0].password) === userPassword.value){
+                        event.preventDefault();  
+                        setSessionStorage('loginUser','{loginStatus: true}' );
                         dispatch(inputClear(defaultSignInInput));
                         navigate('/welcome',{state:{userType:'user', ...userData[0]}});
                         return;
                     }
-                    else {
-                        alert("Kindly register first");
+                    else if(userData.length > 0 && window.atob(userData[0].password) !== userPassword.value){
+                        setErrorMessage("Incorrect Password");
                         dispatch(inputClear(defaultSignInInput));
-                        navigate('/register');
                         return;
                     }   
+                    else{
+                      setErrorMessage("Kindly Register First");
+                      dispatch(inputClear(defaultSignInInput));
+                      return;
+                  }   
                 }        
             }
     }
@@ -121,7 +134,9 @@ const signinHandler = (event) => {
           onClick = {registerHandler}
         />
       </ButtonContainerComponent>
-
+      <div>
+      <ErrorComponent message={errorMessage} />
+      </div>
     </div>
   );
 };

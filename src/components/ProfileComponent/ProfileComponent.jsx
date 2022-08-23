@@ -11,7 +11,6 @@ const ProfileComponent = (props) => {
             <h2>Email: {profileData.email}</h2>
             <h2>Gender: {profileData.gender}</h2>
             <h2>Date: {profileData.date}</h2>
-            <h2>Status: {profileData.status}</h2>
             </div>
         </CardComponent>
     )

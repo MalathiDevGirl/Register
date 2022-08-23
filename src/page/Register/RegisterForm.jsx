@@ -3,14 +3,13 @@ import ButtonContainerComponent from "../../components/ButtonComponent/ButtonCon
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import ErrorComponent from "../../components/ErrorComponent/ErrorComponent";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerActions } from '../../store/registerSlice';
 import { storeActions } from '../../store/storageSlice';
 import { defaultRegisterInput } from '../../store/constants';
 import { hasNoError, getLocalStorage, setLocalStorageItem, updateSingleItem, passwordChangeHandler, confirmPasswordChangeHandler,
 nameChangeHandler, dateChangeHandler, genderChangeHandler, emailChangeHandler, isEmptyObject} from '../../utils/utilities';
-const listOfGenders = ['Female', 'Male'];
 
 const RegisterForm = (props) => {
 
@@ -20,7 +19,9 @@ const RegisterForm = (props) => {
   const {nameAction,dateAction,genderAction,emailAction,passwordAction,confirmPasswordAction,error,inputClear,inputEdit} = registerActions;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  //const [disableField, setDisableField] = useState(false);
+  const [male,setMale] = useState(false);
+  const [female,setFemale] = useState(false);
+  const [disableValue, setDisableValue] = useState(false);
   let payload;
 
   useEffect(() => {
@@ -31,6 +32,15 @@ const RegisterForm = (props) => {
 
   const fetchData = () => {
     dispatch(inputEdit(props.userData));
+    setDisableValue(true)  ;
+    if(props.userData.gender === 'Male'){
+      setMale(true);
+      setFemale(false);
+    }
+    else {
+      setFemale(true);
+      setMale(false); 
+    }
   }
 
   const inputChange = (event) => {
@@ -45,6 +55,7 @@ const RegisterForm = (props) => {
         break;
       case "gender":
         payload = genderChangeHandler(event.target.value);
+        event.target.value === 'Male' ? setMale(true): setFemale(true);
         dispatch(genderAction(payload));
         break;
       case "email":
@@ -82,6 +93,7 @@ const RegisterForm = (props) => {
     //confirmPasswordChangeHandler(password.value,confirmPassword.value);
 
     if (hasNoError(input)) {
+     
       let existingData = getLocalStorage("existingData");
       if (existingData === null) {
         existingData = [];
@@ -95,10 +107,13 @@ const RegisterForm = (props) => {
       }
 
       if(!(isEmptyObject(props))) {
+        const update = {
+          "status":props.userData.status,                 
+          "id": props.userData.id,  
+        }
           entryData = {
-            ...entryData,
-            "id": props.userData.id,               
-            "status":props.userData.status,      
+            ...entryData,             
+            ...update,
         }
         setLocalStorageItem("entryData", entryData);
         dispatch(updateSpecificItem({id : props.userData.id,updatedData: entryData }));
@@ -107,11 +122,16 @@ const RegisterForm = (props) => {
         props.closeForm();
       } 
       else {
+        const update = {
+          "status":'Added',   
+          "id": existingData.length + 1, 
+        }
+        console.log(update);
         entryData = {
           ...entryData,
-          "id": existingData.length + 1,
-          "status":'Added',   
+          ...update,
         }        
+        console.log(entryData);
         setLocalStorageItem("entryData", entryData);
         existingData.push(entryData);
         dispatch(storeData(entryData));
@@ -154,10 +174,12 @@ const RegisterForm = (props) => {
       )}
 
       <p>Please select Gender</p>
-      {listOfGenders.map((genderValue) => {
-        return <InputComponent key={genderValue} type="radio" name="gender" placeholder={genderValue} value={genderValue} inputChange={inputChange}
+      <InputComponent  type="radio" name="gender" placeholder='Male' value='Male' checked = {male}inputChange={inputChange}/>
+      <InputComponent type="radio" name="gender" placeholder='Female' value='Female' checked = {female} inputChange={inputChange}/>
+      {/* {listOfGenders.map((genderValue) => {
+        return <InputComponent key={genderValue} type="radio" name="gender" placeholder={genderValue} value={genderValue}  inputChange={inputChange}
         />
-      })}
+      })} */}
       <br />
 
       <InputComponent name="email"
@@ -185,6 +207,7 @@ const RegisterForm = (props) => {
         placeholder="Confirm Password"
         value={confirmPassword.value}
         inputChange={inputChange}
+        disabled ={disableValue}
        
       
       />

@@ -15,6 +15,7 @@ const storageSlice = createSlice({
                 email: action.payload.email,
                 password: action.payload.password,
                 status: action.payload.status,
+                id: action.payload.id,
             });
         },
         updateStatus(state,action){

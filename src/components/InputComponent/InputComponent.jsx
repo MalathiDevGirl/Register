@@ -4,7 +4,7 @@ const InputComponent = (props) => {
         <div className="input-container">
             <label htmlFor={`${props.name}`}>{`${props.placeholder}`}
                 <input  type={`${props.type}`} id={`${props.name}`} name={`${props.name}`} placeholder={`${props.placeholder}`}
-                        onChange={props.inputChange} value={props.value} disabled={props.disabled} />
+                        onChange={props.inputChange} value={props.value} checked={props.checked} disabled={props.disabled} />
             </label>
         </div>);
 }

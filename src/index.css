@@ -2,9 +2,6 @@
   margin:0;
   padding:0;
 }
-.form {
-  width: 310px;
-}
 h2{
   color: #4d7393;
   margin-bottom:15px;
@@ -23,9 +20,3 @@ code {
     monospace;
 }
 
-
-@media only screen and (max-width:480px) {
-  .form {
-      width: 250px;
-  }
-}

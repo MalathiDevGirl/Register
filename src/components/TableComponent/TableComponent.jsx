@@ -15,14 +15,15 @@ const TableComponent = () => {
     const [userData, setUserData] = useState('');
     const dispatch = useDispatch();
     const {updateStatus} = storeActions;
-    
     useEffect( ()=>{
-    },[actionType]);
-
+        if(userData.status === 'Added' && actionType === "Edited"){
+            setShowForm(true);
+        }
+    },[actionType,userData]);
+  
     const editClick = (id) => {
-        setActionType('Edited');
-        setShowForm(true);
         setUserData(getLocalStorageSingleItem("existingData",id));
+        setActionType('Edited');
     }
 
     const closeForm = () =>{

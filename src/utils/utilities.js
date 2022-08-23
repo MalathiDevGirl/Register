@@ -14,6 +14,14 @@ export const setLocalStorageItem = (itemName, data) => localStorage.setItem(item
 export const hasNoError = (formData) => ((Object.values(formData)).every((value) => value.error === false));
 export const isEmptyObject = object => (Object.keys(object).length === 0);
 
+// const checkCorrectPassword = (email,value) => {
+//     if(email !== ''){
+//         const existingData = getLocalStorage("existingData");
+//         let message =  existingData.filter((data) => data.email === email && window.atob(data.password) === value);
+//         message = !message ? "Password incorrect"
+//     }
+// }
+
 const existEmail = (email) => {
     const existingData = getLocalStorage("existingData");
     let checkEmail;
