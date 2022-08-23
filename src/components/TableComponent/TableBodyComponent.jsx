@@ -7,14 +7,14 @@ import { useEffect } from 'react';
 
 
 const TableBodyComponent = (props) => {       
-    let tableData = useSelector((state) => state.storageSlice); ;
+    let tableData = useSelector((state) => state.storageSlice.data);
    useEffect(() => {
 
    },[tableData]);
     //const tableData = getLocalStorage("existingData");
 
     const getTableRowData =  () =>{
-        if(tableData !== null){
+        if(tableData.length > 0){
            const showTableData = (tableData.map((data,index) => {
                 const statusClass = data.status === "Added" ? "add-status" : "delete-status";
                 return  (<tr key={index+1}>

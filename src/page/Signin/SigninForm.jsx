@@ -9,9 +9,7 @@ import { defaultSignInInput, adminEmail, adminPasword} from '../../store/constan
 import { signInActions } from '../../store/signInSlice';
 
 const SigninForm = () => {
-  const input = useSelector((state) => state.signInSlice);  
-  const storeData = useSelector((state) => state);  
-  console.log(storeData);
+  const input = useSelector((state) => state.signInSlice); 
   const {userEmail,userPassword} = input;
   const {email,password,inputClear,error} = signInActions;
 
@@ -45,7 +43,6 @@ const signinHandler = (event) => {
     setSessionStorage('loginUser','{loginStatus: true}' );
     if(userEmail.value === adminEmail && userPassword.value === adminPasword){
             dispatch(inputClear(defaultSignInInput));
-            console.log(sessionStorage.getItem('loginUser'));
             navigate('/welcome',{state:{userType:'admin'}});
             return;
     }

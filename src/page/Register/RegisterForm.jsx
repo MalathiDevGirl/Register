@@ -10,15 +10,13 @@ import { storeActions } from '../../store/storageSlice';
 import { defaultRegisterInput } from '../../store/constants';
 import { hasNoError, getLocalStorage, setLocalStorageItem, updateSingleItem, passwordChangeHandler, confirmPasswordChangeHandler,
 nameChangeHandler, dateChangeHandler, genderChangeHandler, emailChangeHandler, isEmptyObject} from '../../utils/utilities';
-//import { useParams } from 'react-router-dom';
-
 const listOfGenders = ['Female', 'Male'];
 
 const RegisterForm = (props) => {
 
   const input = useSelector((state) => state.registerSlice);
   const {name,date,gender,email,password,confirmPassword} = input;
-  const {storeData} = storeActions;
+  const {storeData,updateSpecificItem} = storeActions;
   const {nameAction,dateAction,genderAction,emailAction,passwordAction,confirmPasswordAction,error,inputClear,inputEdit} = registerActions;
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -93,15 +91,16 @@ const RegisterForm = (props) => {
         "gender": gender.value,
         "email": email.value,
         "password": window.btoa(password.value),
-        "status": "Added",
       }
 
       if(!(isEmptyObject(props))) {
           entryData = {
             ...entryData,
-            "id": props.userData.id,         
+            "id": props.userData.id,               
+            "status":props.userData.status,      
         }
         setLocalStorageItem("entryData", entryData);
+        dispatch(updateSpecificItem({id : props.userData.id,updatedData: entryData }));
         updateSingleItem(props.userData.id,entryData);       
         dispatch(inputClear(defaultRegisterInput));
         props.closeForm();
@@ -113,8 +112,8 @@ const RegisterForm = (props) => {
         }        
         setLocalStorageItem("entryData", entryData);
         existingData.push(entryData);
+        dispatch(storeData(entryData));
         setLocalStorageItem("existingData", existingData);
-        dispatch(storeData(existingData));
         dispatch(inputClear(defaultRegisterInput));
         navigate('/')
       } 
